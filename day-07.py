@@ -67,15 +67,14 @@ def run_amps(amps, start_input):
 # Part 1
 
 phases_permutations = list(itertools.permutations(range(5)))
-possible_outputs = (run_amps(start_amps(input_code, phases), 0) for phases in phases_permutations)
-print(f"Highest signal Part 1 : {max(possible_outputs)}")
+signals = (run_amps(start_amps(input_code, phases), 0) for phases in phases_permutations)
+print(f"Highest signal Part 1 : {max(signals)}")
 
 
 
 #  Part 2
 
-def iterative_run_amps(amps, start_input):
-    
+def iterative_run_amps(amps, start_input):    
     next_input = start_input
     while True:
         try:
@@ -85,7 +84,7 @@ def iterative_run_amps(amps, start_input):
 
 
 phases_permutations = list(itertools.permutations(range(5,10)))
-possible_outputs = (iterative_run_amps(start_amps(input_code, phases), 0) for phases in phases_permutations)
-print(f"Highest signal Part 2 : {max(possible_outputs)}")
+signals = (iterative_run_amps(start_amps(input_code, phases), 0) for phases in phases_permutations)
+print(f"Highest signal Part 2 : {max(signals)}")
 
 
