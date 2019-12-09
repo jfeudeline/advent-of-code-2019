@@ -3,41 +3,60 @@ import itertools
 with open("input-07.txt") as f:
     input_code = [int(code) for code in f.readline().split(',')]
 
+def get_index(program, index, mode):
+        if mode == 0:
+            index = program[index]
+        if index >= len(program) :
+            program += [0] *  (index + 1- len(program))
+        return index
+
 
 def run_intcode(intcode):
     program = list(intcode)
     i=0
+
     while True:
-        instruction = program[i]
+
+        instruction = program[get_index(program, index=i, mode=1)]
         opcode = instruction % 100
+
         if opcode == 99:
             return None
-        elif opcode == 3:
-            program[program[i+1]] = yield
-            i += 2
-        elif opcode == 4:
-            yield program[program[i+1]]
-            i += 2
+        
         else:
-            value_1 = program[i+1] if (instruction // 100) % 10 else program[program[i+1]]
-            value_2 = program[i+2] if (instruction // 1000) % 10 else program[program[i+2]]
-
+            modes = [(instruction // 10**n) % 10 for n in range(2, 5)]
+            indexes = [get_index(program, index=i+j+1, mode= modes[j]) for j in range(3)]
+            
             if opcode == 1:
-                program[program[i+3]] =  value_1 + value_2
+                program[indexes[2]] = program[indexes[0]] + program[indexes[1]]
                 i += 4
+
             elif opcode == 2:
-                program[program[i+3]] =  value_1 * value_2
-                i += 4        
+                program[indexes[2]] = program[indexes[0]] * program[indexes[1]]
+                i += 4  
+
+            elif opcode == 3:
+                program[indexes[0]] = yield
+                i += 2
+
+            elif opcode == 4:
+                yield  program[indexes[0]]
+                i += 2
+
             elif opcode == 5:
-                i = value_2 if value_1 else i+3
+                i = program[indexes[1]] if program[indexes[0]] else i+3
+
             elif opcode == 6:
-                i = i+3 if value_1 else value_2
+                i = i+3 if program[indexes[0]] else program[indexes[1]]
+
             elif opcode == 7:
-                program[program[i+3]] = 1 if value_1 < value_2 else 0
+                program[indexes[2]] = 1 if program[indexes[0]] < program[indexes[1]] else 0
                 i += 4
+
             elif opcode == 8:
-                program[program[i+3]] = 1 if value_1 == value_2 else 0
+                program[indexes[2]] = 1 if program[indexes[0]] == program[indexes[1]] else 0
                 i += 4
+
 
 def start_amp(program, phase):
     amp = run_intcode(program)
