@@ -1,61 +1,6 @@
 import itertools
 
-with open("input-07.txt") as f:
-    input_code = [int(code) for code in f.readline().split(',')]
-
-def get_index(program, index, mode):
-        if mode == 0:
-            index = program[index]
-        if index >= len(program) :
-            program += [0] *  (index + 1- len(program))
-        return index
-
-
-def run_intcode(intcode):
-    program = list(intcode)
-    i=0
-
-    while True:
-
-        instruction = program[get_index(program, index=i, mode=1)]
-        opcode = instruction % 100
-
-        if opcode == 99:
-            return None
-        
-        else:
-            modes = [(instruction // 10**n) % 10 for n in range(2, 5)]
-            indexes = [get_index(program, index=i+j+1, mode= modes[j]) for j in range(3)]
-            
-            if opcode == 1:
-                program[indexes[2]] = program[indexes[0]] + program[indexes[1]]
-                i += 4
-
-            elif opcode == 2:
-                program[indexes[2]] = program[indexes[0]] * program[indexes[1]]
-                i += 4  
-
-            elif opcode == 3:
-                program[indexes[0]] = yield
-                i += 2
-
-            elif opcode == 4:
-                yield  program[indexes[0]]
-                i += 2
-
-            elif opcode == 5:
-                i = program[indexes[1]] if program[indexes[0]] else i+3
-
-            elif opcode == 6:
-                i = i+3 if program[indexes[0]] else program[indexes[1]]
-
-            elif opcode == 7:
-                program[indexes[2]] = 1 if program[indexes[0]] < program[indexes[1]] else 0
-                i += 4
-
-            elif opcode == 8:
-                program[indexes[2]] = 1 if program[indexes[0]] == program[indexes[1]] else 0
-                i += 4
+from intcode import run_intcode
 
 
 def start_amp(program, phase):
@@ -81,6 +26,11 @@ def run_amps(amps, start_input):
             except StopIteration:
                 pass
     return next_input
+
+
+
+with open("input-07.txt") as f:
+    input_code = [int(code) for code in f.readline().split(',')]
         
 
 # Part 1
