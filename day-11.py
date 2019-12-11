@@ -59,38 +59,18 @@ def run_intcode(intcode):
                 base += program[indexes[0]]
                 i += 2
 
-
-def run_boost(program, start_input = None):
-
-    boost = run_intcode(program)    
-    print("Starting...")
-
-    if start_input:
-        next(boost)
-        print(f"Output : {boost.send(start_input)}")
-
-    while True:
-        try :
-            print(f"Output : {next(boost)}")
-        except StopIteration:
-            print("...Ending")
-            break
-
-
-
-
-
 with open("input-11.txt") as f:
     input_code = [int(code) for code in f.readline().split(',')]
 
-#print(input_code)
+# test code
+input_code = "103,0,104,1,104,0,103,0,104,0,104,0, 103,0,104,1,104,0, 103,0,104,1,104,0, 103,0,104,0,104,1, 103,0,104,1,104,0, 103,0,104,1,104,0,99".split(",")
+input_code = [int(code) for code in input_code]
 
 def get_new_position(pos, dir, turn):
-    #print(f"turn {turn}")
     if turn == 0:
-        dir += 1
-    elif turn == 1:
         dir += -1
+    elif turn == 1:
+        dir += 1
     if dir == 5:
         dir = 1
     elif dir == -1:
@@ -103,7 +83,6 @@ def get_new_position(pos, dir, turn):
         pos = (pos[0], pos[1]-1)
     elif dir==4:
         pos = (pos[0]-1, pos[1])
-    print(pos, dir)
     return pos, dir
 
 
@@ -114,38 +93,17 @@ colors = {}
 bot = run_intcode(input_code)
 next(bot)
 while True:
-#for _ in range(3):
-    #print(colors.get(position, 0))
-    colors[position] = bot.send(colors.get(position, 0))
-    #print(colors[position])
-    try:
-        position, direction = get_new_position(position, direction, next(bot))
+#for _ in range(10):
+    #print("Position : {}, direction : {}".format(position, direction))
+    color = bot.send(colors.get(position, 0))
+    #print(f"Color : {color}")
+    colors[position] = color
+    turn = next(bot)
+    #print(f"Turn : {turn}")
+    position, direction = get_new_position(position, direction, turn)
+    #print(f"Painted positions {colors}")
+    try:        
         next(bot)
     except StopIteration:
         print(len(colors))
         break
-
-"""
-print(next(bot))
-print(bot.send(0))
-print(next(bot))
-print(next(bot))
-print(bot.send(0))
-print(next(bot))
-print(next(bot))
-    
-"""
-
-"""
-
-test1 = [109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99]
-test2 = [1102,34915192,34915192,7,4,7,99,0]
-test3 = [104,1125899906842624,99]
-
-#run_boost(test1)
-#run_boost(test2)
-#run_boost(test3)
-run_boost(input_code, start_input=1)
-run_boost(input_code, start_input=2)
-
-"""
