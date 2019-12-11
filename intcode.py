@@ -7,6 +7,19 @@ def get_index(program, index, mode, base):
             program += [0] *  (index + 1- len(program))
         return index
 
+number_of_parameters = {
+    # number of parameters of an opcode
+    1 : 3,
+    2 : 3,
+    3 : 1,
+    4 : 1,
+    5 : 2,
+    6 : 2,
+    7 : 3,
+    8 : 3,
+    9 : 1
+}
+                
 
 def run_intcode(intcode):
     program = list(intcode)
@@ -17,13 +30,15 @@ def run_intcode(intcode):
 
         instruction = program[get_index(program, index=i, mode=1, base=base)]
         opcode = instruction % 100
+        
 
         if opcode == 99:
             return None
         
         else:
             modes = [(instruction // 10**n) % 10 for n in range(2, 5)]
-            indexes = [get_index(program, index=i+j+1, mode= modes[j], base=base) for j in range(3)]
+            
+            indexes = [get_index(program, index=i+j+1, mode= modes[j], base=base) for j in range(number_of_parameters[opcode])]
             
             if opcode == 1:
                 program[indexes[2]] = program[indexes[0]] + program[indexes[1]]
