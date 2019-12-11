@@ -1,29 +1,37 @@
 from intcode import run_intcode
 
-def get_new_position(pos, direction, turn):
+UP = 1
+RIGHT = 2
+DOWN = 3
+LEFT = 4
+
+def get_new_position(coords, direction, turn):
     if turn == 0:
         direction += -1
     elif turn == 1:
         direction += 1
+
     if direction == 5:
-        direction = 1
+        direction = UP
     elif direction == 0:
-        direction = 4
-    if direction==1:
-        pos = (pos[0], pos[1]+1)
-    elif direction==2:
-        pos = (pos[0]+1, pos[1])
-    elif direction==3:
-        pos = (pos[0], pos[1]-1)
-    elif direction==4:
-        pos = (pos[0]-1, pos[1])
-    return pos, direction
+        direction = LEFT
+
+    if direction == UP:
+        coords = (coords[0], coords[1]+1)
+    elif direction == RIGHT:
+        coords = (coords[0]+1, coords[1])
+    elif direction == DOWN:
+        coords = (coords[0], coords[1]-1)
+    elif direction == LEFT:
+        coords = (coords[0]-1, coords[1])
+
+    return coords, direction
 
 
 def run_bot(program, start_colors = {}):
 
     position = (0,0)
-    direction = 1
+    direction = UP
     colors = start_colors
 
     bot = run_intcode(program)    
