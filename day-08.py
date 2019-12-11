@@ -21,7 +21,10 @@ for layer in layers:
         min_number_of_0 = number_of_0
         test_result = layer.count('1') * layer.count('2')
 
+print("Part 1 :")
+print("--------")
 print(f"Test result : {test_result}")
+print()
 
 
 
@@ -42,14 +45,31 @@ for i in range(image_length):
 
 decoded_image = ''.join(decoded_image)
 
-# print password
 
-print("Password :")
-print("----------")
+print("Part 2 :")
+print("--------")
+
 
 for row in range(col_length):
     start = row * row_length
     print(decoded_image[start : start + row_length])
+
+print()
+
+"""
+Part 1 :
+--------
+Test result : 2080
+
+Part 2 :
+--------
+ ▍▍  ▍  ▍ ▍▍▍   ▍▍  ▍   ▍
+▍  ▍ ▍  ▍ ▍  ▍ ▍  ▍ ▍   ▍
+▍  ▍ ▍  ▍ ▍  ▍ ▍     ▍ ▍ 
+▍▍▍▍ ▍  ▍ ▍▍▍  ▍      ▍  
+▍  ▍ ▍  ▍ ▍ ▍  ▍  ▍   ▍  
+▍  ▍  ▍▍  ▍  ▍  ▍▍    ▍ 
+"""
 
 
 

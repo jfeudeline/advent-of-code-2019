@@ -58,3 +58,8 @@ x_1, y_1 = get_vectorial_coords(rayon, angle)
 
 print(f"The 200th asteroid to be vaporized is at ({x_0 + x_1},{y_0 + y_1})")
 
+"""
+Best position : (22, 25) with 286 visible asteroides
+The 200th asteroid to be vaporized is at (5,4)
+"""
+

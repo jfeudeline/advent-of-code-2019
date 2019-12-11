@@ -1,29 +1,25 @@
 from intcode import run_intcode
 
-UP = 1
-RIGHT = 2
-DOWN = 3
-LEFT = 4
+
+UP = 0
+RIGHT = 1
+DOWN = 2
+LEFT = 3
+
 
 def get_new_position(coords, direction, turn):
-    if turn == 0:
-        direction += -1
-    elif turn == 1:
-        direction += 1
 
-    if direction == 5:
-        direction = UP
-    elif direction == 0:
-        direction = LEFT
+    turn = 1 if turn == 1 else -1
+    direction = (direction + turn) % 4
+    
+    dir_coords = {
+        UP : (0, 1),
+        RIGHT : (1, 0),
+        DOWN : (0, -1),
+        LEFT : (-1, 0)
+    }
 
-    if direction == UP:
-        coords = (coords[0], coords[1]+1)
-    elif direction == RIGHT:
-        coords = (coords[0]+1, coords[1])
-    elif direction == DOWN:
-        coords = (coords[0], coords[1]-1)
-    elif direction == LEFT:
-        coords = (coords[0]-1, coords[1])
+    coords = tuple(coords[i] + dir_coords[direction][i] for i in range(2))
 
     return coords, direction
 
@@ -36,15 +32,20 @@ def run_bot(program, start_colors = {}):
 
     bot = run_intcode(program)    
     next(bot)
+
     while True:
+
         color = bot.send(colors.get(position, 0))
         colors[position] = color
+
         turn = next(bot)
         position, direction = get_new_position(position, direction, turn)
+
         try:        
             next(bot)
         except StopIteration:
             break
+
     return colors
 
 
@@ -58,7 +59,8 @@ with open("input-11.txt") as f:
 
 
 # Part 1
-
+print("Part 1 :")
+print("--------")
 print(f"Number of painted positions : {len(run_bot(input_code))}")
 print()
 
@@ -69,8 +71,26 @@ colors = run_bot(input_code, start_colors= {(0, 0) : 1})
 x_list = sorted(list(set(key[0] for key in colors.keys())))
 y_list = sorted(list(set(key[1] for key in colors.keys())))
 
+
+print("Part 2 :")
+print("--------")
 for j in reversed(y_list):
     line = ""
     for i in x_list:
         line += '▍' if colors.get((i, j), 0) == 1 else ' '
     print(line)
+
+"""
+Part 1 :
+--------
+Number of painted positions : 1747
+
+Part 2 :
+--------
+ ▍▍▍▍  ▍▍   ▍▍  ▍▍▍  ▍  ▍ ▍  ▍ ▍    ▍▍▍    
+    ▍ ▍  ▍ ▍  ▍ ▍  ▍ ▍  ▍ ▍ ▍  ▍    ▍  ▍   
+   ▍  ▍    ▍    ▍  ▍ ▍▍▍▍ ▍▍   ▍    ▍▍▍    
+  ▍   ▍    ▍ ▍▍ ▍▍▍  ▍  ▍ ▍ ▍  ▍    ▍  ▍   
+ ▍    ▍  ▍ ▍  ▍ ▍ ▍  ▍  ▍ ▍ ▍  ▍    ▍  ▍   
+ ▍▍▍▍  ▍▍   ▍▍▍ ▍  ▍ ▍  ▍ ▍  ▍ ▍▍▍▍ ▍▍▍ 
+"""
