@@ -38,7 +38,7 @@ for layer in reversed(layers):
 decoded_image = final_image
 
 for i in range(image_length):
-    decoded_image[i] = '*' if final_image[i] == '1' else ' '
+    decoded_image[i] = '▍' if final_image[i] == '1' else ' '
 
 decoded_image = ''.join(decoded_image)
 

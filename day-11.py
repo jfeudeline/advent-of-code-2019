@@ -36,7 +36,6 @@ def run_bot(program, start_colors = {}):
         try:        
             next(bot)
         except StopIteration:
-            print(f"Number of painted positions {len(colors)}")
             break
     return colors
 
@@ -52,7 +51,8 @@ with open("input-11.txt") as f:
 
 # Part 1
 
-print(run_bot(input_code))
+print(f"Number of painted positions : {len(run_bot(input_code))}")
+print()
 
 # Part 2
 
@@ -64,5 +64,5 @@ y_list = sorted(list(set(key[1] for key in colors.keys())))
 for j in reversed(y_list):
     line = ""
     for i in x_list:
-        line += '*' if colors.get((i, j), 0) == 1 else ' '
+        line += '▍' if colors.get((i, j), 0) == 1 else ' '
     print(line)
